@@ -1,0 +1,7 @@
+Flask==3.1.0
+Flask-RESTful==0.3.10
+pdfplumber==0.11.4
+flask-cors==5.0.0
+groq==0.13.1
+faiss-cpu==1.9.0
+sentence-transformers==3.3.1
