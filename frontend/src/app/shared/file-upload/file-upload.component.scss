@@ -79,6 +79,11 @@
             }
         }
     }
+    .loading{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
     .submit {
         display: block;

@@ -27,7 +27,9 @@
         </li>
       </ul>
     </div>
-
+    <div class="loading" *ngIf="loading">
+      <img src="assets/loading.gif" alt="">
+    </div>
     <button class="submit" [disabled]="uploadedFiles.length === 0">Submit</button>
   </form>
 </div>

@@ -14,6 +14,7 @@ import { BrowserModule } from '@angular/platform-browser';
 export class FileUploadComponent {
   uploadForm: FormGroup;
   uploadedFiles: File[] = [];
+  loading:boolean = false;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.uploadForm = this.fb.group({
@@ -35,6 +36,7 @@ export class FileUploadComponent {
   }
 
   submit(): void {
+    this.loading= true
     const formData = new FormData();
 
     // Append all files to the FormData object
@@ -46,7 +48,7 @@ export class FileUploadComponent {
     // Send the files to the server without manually setting Content-Type
     this.http.post(`http://127.0.0.1:5000/pdf`, formData)
     .subscribe(response => {
-      
+      this.loading=false
       alert('Files uploaded successfully!');
     }, error => {
       return(error);

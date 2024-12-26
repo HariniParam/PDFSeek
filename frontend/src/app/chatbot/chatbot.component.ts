@@ -49,8 +49,13 @@ export class ChatbotComponent {
 
   exportChat() {
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 10;
+    const maxWidth = pageWidth - 2 * margin;
     const formattedChat = this.messages.map(message => `${message.role}: ${message.content}`).join('\n');
-    doc.text(formattedChat, 10, 10);
+    doc.text(formattedChat, margin, margin, {
+        maxWidth: maxWidth
+    });
     doc.save('chat_export.pdf');
   }
 }
