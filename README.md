@@ -17,6 +17,32 @@ Ensure the following are installed on your system:
 
 ---
 
+# Groq API Key Configuration
+
+To use the Groq API in this project, you need to obtain an API key. Follow the steps below:
+
+---
+
+## Obtaining the API Key
+
+1. Visit the Groq API key management page:  
+   [Obtain API Key](https://console.groq.com)
+
+2. Log in with your credentials or create a new account if you don’t have one.
+
+3. Generate a new API key under your account settings.
+
+4. Copy the API key to use in the project.
+
+---
+
+## Configuring the API Key in the Project
+
+1. Add the API key to the appropriate configuration variable:
+   ```python
+   GROQ_API_KEY = "your_api_key_here"
+
+
 ## Frontend Setup
 ### How to Run :
   1. Clone the repo.
