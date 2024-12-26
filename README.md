@@ -61,7 +61,7 @@ To use the Groq API in this project, you need to obtain an API key. Follow the s
      ```bash
      ng serve
      ```
-     The application will be accessible at [http://localhost:4200/](http://localhost:4200/) .
+     The application will be accessible at [http://localhost:4200/](http://localhost:4200/)
 
 # Backend Setup for Hackathon Project
 
