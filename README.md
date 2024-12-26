@@ -120,7 +120,7 @@ Follow these steps to configure MongoDB for the hackathon project:
      ```
 
 4. **Set up the required collections and data**:
-   - Based on the application's requirements, create necessary collections ( `users`, `products`).
+   - Based on the application's requirements, create necessary collections ( `users`).
 
 ---
 
