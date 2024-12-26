@@ -36,21 +36,18 @@ export class LoginComponent {
     this.http.post<any>(`http://127.0.0.1:5000/auth/signin`, { username: this.username, password: this.password }, { headers })
       .subscribe(
         response => {
-          // Handle success response (e.g., store the token)
           this.successMessage = 'Login successful!';
           this.userName = response["name"];
           console.log(response);
           this.loggedInEvent.emit([true, this.userName]);
         },
         error => {
-          // Handle error (e.g., show an error message)
           this.errorMessage = 'Invalid credentials, please try again.';
           alert(error);
         }
       );
   }
 
-  // Handle signup
   onSignup() {
     if (!this.username || !this.password) {
       this.errorMessage = 'Please provide both username and password.';
@@ -61,13 +58,11 @@ export class LoginComponent {
     this.http.post<any>(`http://127.0.0.1:5000/auth/signup`, { username: this.username, password: this.password }, { headers })
       .subscribe(
         response => {
-          // Handle success response
           this.successMessage = 'Signup successful! Please log in.';
           this.toggle();
           console.log(response);
         },
         error => {
-          // Handle error (e.g., show an error message)
           this.errorMessage = 'Error during signup, please try again.';
           alert(error);
         }

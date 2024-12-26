@@ -15,7 +15,6 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 
 
-# Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
@@ -34,19 +33,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'pdf'}
 PDF_CONTENT = 'C:/Users/Dell/Desktop/Sem-8/Hackathon-2024/temp/pdf_content.json'
 
-# Sentence Transformer for embedding
 model = SentenceTransformer('all-MiniLM-L6-v2')
-index = faiss.IndexFlatL2(384)  # Dimension of embedding vector
-metadata = []  # To store metadata about chunks
+index = faiss.IndexFlatL2(384) 
+metadata = []
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def authenticate(username, password):
-    """
-    Authenticate user by verifying the username and password.
-    Returns True if valid, False otherwise.
-    """
     user = users_collection.find_one({"username": username})
     if user and check_password_hash(user.get("password"), password):
         return True
@@ -54,9 +48,6 @@ def authenticate(username, password):
 
 class UserSignup(Resource):
     def post(self):
-        """
-        Handle user signup with username, password, and optional email.
-        """
         data = request.get_json()
 
         if 'username' not in data or 'password' not in data:
@@ -65,11 +56,9 @@ class UserSignup(Resource):
         username = data['username']
         password = data['password']
 
-        # Check if user already exists
         if users_collection.find_one({"username": username}):
             return {"error": "Username already exists"}, 400
 
-        # Hash the password and save the user to the database
         hashed_password = generate_password_hash(password)
         users_collection.insert_one({
             "username": username,
@@ -80,10 +69,6 @@ class UserSignup(Resource):
 
 class UserLogin(Resource):
     def post(self):
-        """
-        Handle user login with username and password.
-        Authenticate the user and return a success message.
-        """
         data = request.get_json()
 
         if 'username' not in data or 'password' not in data:
@@ -92,7 +77,6 @@ class UserLogin(Resource):
         username = data['username']
         password = data['password']
 
-        # Authenticate the user
         if authenticate(username, password):
             return {"name": username}, 200
         else:
@@ -100,25 +84,18 @@ class UserLogin(Resource):
 
 class UserProfile(Resource):
     def get(self):
-        """
-        Fetch the authenticated user's profile data.
-        Requires valid authentication via headers.
-        """
         auth = request.headers.get('Authorization')
         if not auth:
             return {"error": "Authorization header is missing"}, 401
 
         try:
-            # Basic Authorization format: username:password
             username, password = auth.split(":")
         except ValueError:
             return {"error": "Invalid Authorization header format"}, 400
 
-        # Authenticate the user
         if authenticate(username, password):
             user = users_collection.find_one({"username": username})
             if user:
-                # Return user profile data
                 return {
                     "username": user["username"],
                     "email": user.get("email", "N/A")
@@ -145,13 +122,11 @@ class PDF(Resource):
                         for page_number, page in enumerate(pdf.pages):
                             text = page.extract_text() or ""
                             if text.strip():
-                                # Create metadata for each chunk
                                 chunk = {
                                     "content": text,
                                     "page": page_number + 1,
                                     "filename": filename
                                 }
-                                # Embed the chunk and add to FAISS index
                                 embedding = model.encode(text).astype("float32")
                                 index.add(embedding.reshape(1, -1))
                                 metadata.append(chunk)
@@ -170,11 +145,9 @@ class Chat(Resource):
         if 'message' not in data or 'role' not in data:
             return {"error": "Missing 'message' or 'role' in the request"}, 400
 
-        # User query
         query = data['message']
         query_embedding = model.encode(query).astype("float32")
 
-        # Retrieve top 5 relevant chunks
         k = 5
         distances, indices = index.search(query_embedding.reshape(1, -1), k)
         retrieved_chunks = [metadata[i] for i in indices[0] if i < len(metadata)]

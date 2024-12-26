@@ -14,7 +14,7 @@ import jsPDF from 'jspdf';
   styleUrl: './chatbot.component.scss'
 })
 export class ChatbotComponent {
-  messages: { role: string; content: string }[] = []; // Array to hold messages with roles
+  messages: { role: string; content: string }[] = [];
   newMessage: string = '';
   role: string = 'user';
 
@@ -22,23 +22,19 @@ export class ChatbotComponent {
 
   sendMessage() {
     if (this.newMessage.trim()) {
-      // Push the user's message to the messages array
       this.messages.push({ role: 'user', content: this.newMessage.trim() });
 
-      // Prepare the message payload
       const messagePayload = {
-        role: this.role, // 'user'
+        role: this.role,
         message: this.newMessage.trim()
       };
 
-      // Send the message to the backend via POST request
       this.http.post('http://127.0.0.1:5000/chat', messagePayload)
         .subscribe(
           (response: any) => {
             console.log('Message sent successfully', response);
-            // Push the bot's reply to the messages array
             this.messages.push({ role: 'bot', content: response["message"] });
-            this.newMessage = ''; // Clear the input field
+            this.newMessage = ''; 
           },
           (error) => {
             console.error('Error sending message', error);

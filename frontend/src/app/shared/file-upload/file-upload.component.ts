@@ -39,13 +39,11 @@ export class FileUploadComponent {
     this.loading= true
     const formData = new FormData();
 
-    // Append all files to the FormData object
     for (let file of this.uploadedFiles) {
       formData.append('pdfFiles', file, file.name);
     }
     console.log(this.uploadedFiles);
 
-    // Send the files to the server without manually setting Content-Type
     this.http.post(`http://127.0.0.1:5000/pdf`, formData)
     .subscribe(response => {
       this.loading=false
